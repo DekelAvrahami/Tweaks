@@ -90,6 +90,24 @@
 
 @end
 
+@implementation FBViewControllerTweak
+
+@synthesize name = _name;
+@synthesize identifier = _identifier;
+@synthesize currentValue = _currentValue;
+
+- (instancetype)initWithIdentifier:(NSString *)identifier name:(NSString *)name
+                    viewController:(UIViewController *)viewController {
+  if (self = [super init]) {
+    _identifier = identifier;
+    _name = name;
+    _currentValue = viewController;
+  }
+  return self;
+}
+
+@end
+
 @implementation FBMutableTweak
 
 @synthesize name = _name;

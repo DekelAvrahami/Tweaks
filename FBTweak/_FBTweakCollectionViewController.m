@@ -20,6 +20,7 @@
 #import "_FBTweakTableViewCell.h"
 #import "_FBEditableTweakDateViewController.h"
 #import "_FBEditableTweakStringViewController.h"
+#import "_FBViewControllerTweakTableViewCell.h"
 
 @implementation _FBTweakCollectionViewController {
   _FBKeyboardManager *_keyboardManager;
@@ -43,6 +44,8 @@
            forCellReuseIdentifier:NSStringFromClass([_FBEditableTweakTableViewCell class])];
     [self.tableView registerClass:[_FBActionTweakTableViewCell class]
            forCellReuseIdentifier:NSStringFromClass([_FBActionTweakTableViewCell class])];
+    [self.tableView registerClass:[_FBViewControllerTweakTableViewCell class]
+           forCellReuseIdentifier:NSStringFromClass([_FBViewControllerTweakTableViewCell class])];
     [self.tableView registerClass:[_FBTweakTableViewCell class]
            forCellReuseIdentifier:NSStringFromClass([_FBTweakTableViewCell class])];
   }
@@ -55,6 +58,8 @@
     return [_FBActionTweakTableViewCell class];
   } else if ([tweak conformsToProtocol:@protocol(FBEditableTweak)]) {
     return [_FBEditableTweakTableViewCell class];
+  } else if ([tweak conformsToProtocol:@protocol(FBViewControllerTweak)]) {
+    return [_FBViewControllerTweakTableViewCell class];
   }
   return [_FBTweakTableViewCell class];
 }
@@ -200,6 +205,8 @@
           initWithEditableTweak:editableTweak];
       [self.navigationController pushViewController:vc animated:YES];
     }
+  } else if ([tweak.currentValue isKindOfClass:[UIViewController class]]) {
+    [self.navigationController pushViewController:tweak.currentValue animated:YES];
   } else {
     // Other FBTweak objects are read-only
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

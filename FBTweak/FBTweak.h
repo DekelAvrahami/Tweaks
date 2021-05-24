@@ -11,11 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class UIViewController;
+
 /**
   @abstract Represents a possible value of a tweak.
   @discussion Should be able to be persisted in user defaults,
-    except actions (represented as blocks without a currentValue).
-    For minimum and maximum values, should implement -compare:.
+    except actions (represented as blocks without a currentValue),
+    and view controllers. For minimum and maximum values, should
+    implement -compare:.
  */
 typedef id FBTweakValue;
 
@@ -90,6 +93,18 @@ typedef id FBTweakValue;
  @abstract If \c NO the block is not allowed to be called.
  */
 @property (nonatomic) BOOL isEnabled;
+
+@end
+
+/**
+ @abstract A tweak that contains a \c UIViewController as its \c currentValue.
+ */
+@protocol FBViewControllerTweak <FBTweak>
+
+/**
+ @abstract The underlying view controller for this tweak.
+ */
+@property (readonly ,nonatomic) UIViewController *currentValue;
 
 @end
 
@@ -182,6 +197,22 @@ typedef id FBTweakValue;
  */
 - (instancetype)initWithIdentifier:(NSString *)identifier name:(NSString *)name
                              block:(dispatch_block_t)block NS_DESIGNATED_INITIALIZER;
+
+@end
+
+/**
+ @abstract A tweak with an underlying view controller.
+ */
+@interface FBViewControllerTweak : NSObject <FBViewControllerTweak>
+
+- (instancetype)init NS_UNAVAILABLE;
+
+/**
+ @abstract Initializes with \c identifier, \c name and \c viewController as the underlying view
+ controller. The \c currentValue property of the tweak is set to be the \c viewController.
+ */
+- (instancetype)initWithIdentifier:(NSString *)identifier name:(NSString *)name
+                    viewController:(UIViewController *)viewController NS_DESIGNATED_INITIALIZER;
 
 @end
 
